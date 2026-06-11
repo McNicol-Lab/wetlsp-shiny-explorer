@@ -1,91 +1,65 @@
-# WetLSP CyVerse Explorer
+# WetLSP Explorer
 
-Starter Shiny app for exploring WetLSP PlanetScope EVI products stored in a portable folder layout:
+Interactive visualization and exploration platform for the WetLSP (Wetland Land Surface Phenology) dataset.
 
-```text
-wetlsp-cyverse/
-    wetlsp_cyverse_site_catalog_final.csv
-    wetlsp_cyverse_site_catalog_final.json
-    SITE1/
-        SITE1-wetlsp-2021.nc
-        SITE1-wetlsp-2022.nc
-        SITE1-wetlsp-2023.nc
-        SITE1-wetlsp-2024.nc
-        pixels_geom_ds/
-        pixels_meta_ds/
-        pixels_timeseries_ds/
-        README-parquet.json
-        README-parquet.md
-    SITE2/
-    ...
-```
+## Overview
 
-The app is designed to work with either:
+WetLSP provides global high-resolution wetland vegetation dynamics derived from PlanetScope imagery for methane science, ecological forecasting, and machine learning applications.
 
-1. A local or mounted data directory, e.g. `/Volumes/CyVerse/wetlsp-cyverse`
-2. A public HTTPS/WebDAV root, e.g. `https://data.cyverse.org/dav-anon/iplant/home/<user>/wetlsp-cyverse`
-3. A future S3-compatible bucket, if paths are adapted.
+The dataset contains:  
 
-## Core functions
+  * 95 wetland flux tower sites worldwide
+  * Daily gap-filled EVI trajectories
+  * 3 m spatial resolution vegetation dynamics
+  * 24 annual phenometric products following Moon et al. (2022)
+  * Pixel-level and site-level products
+  * Interactive visualization through a Shiny application
 
-- Site catalog browser
-- Interactive site map
-- EVI time-series plotting from Parquet
-- Raw versus spline filtering
-- Optional pixel subsampling
-- Annual NetCDF phenometric metadata/layer inspection
-- Direct data-path display for downloads/citation
+## Data Products
 
-## Install R packages
+### Pixel-Level Time Series
 
-```r
-install.packages(c(
-  "shiny", "bslib", "DT", "dplyr", "readr", "ggplot2", "leaflet",
-  "arrow", "duckdb", "DBI", "glue", "stringr", "lubridate",
-  "tidyr", "jsonlite", "ncdf4", "terra"
-))
-```
+Daily EVI trajectories for individual pixels.
 
-`terra` and `ncdf4` are only needed for NetCDF layer inspection. The Parquet time-series explorer mainly uses `arrow`, `dplyr`, and `ggplot2`.
+Formats:
 
-## Configure the data root
+* Apache Parquet
+* R objects (.rds)
 
-Copy `config.example.yml` to `config.yml` and edit:
+### Annual Phenometric Products
 
-```yaml
-data_root: "/path/to/wetlsp-cyverse"
-catalog_csv: "wetlsp_cyverse_site_catalog_final.csv"
-mode: "local"
-```
+Twenty-four annual vegetation phenometrics generated using the Moon et al. (2022) methodology.
 
-For public CyVerse WebDAV/HTTPS, use a URL root:
+Format:
 
-```yaml
-data_root: "https://data.cyverse.org/dav/iplant/projects/esiil/ai_for_natural_methane_working_group/wetlsp-cyverse"
-catalog_csv: "wetlsp_cyverse_site_catalog_final.csv"
-mode: "http"
-```
+* NetCDF
 
-Important: full remote Parquet directory reads over WebDAV/HTTPS can be slow or unsupported depending on server listing behavior. For production, either:
-- precompute site/year summary Parquet files, or
-- serve from S3-compatible object storage, or
-- run the app inside CyVerse/VICE near the data.
+### Site Catalog
 
-## Run
+Metadata describing all WetLSP sites.
 
-```r
+Formats:
+
+* CSV
+* JSON
+
+### Data Access
+
+Data are hosted through CyVerse under:
+
+`/data-store/iplant/home/shared/esiil/ai_for_natural_methane_working_group/wetlsp-cyverse`
+
+### Launching the Application
+
 shiny::runApp()
-```
 
-## Recommended production enhancement
+See:
 
-Before deploying to public users, create summary tables such as:
+* docs/wetlsp_demo_guide.md
+* docs/wetlsp_user_guide.md
 
-```text
-summaries/
-    site_daily_evi_summary.parquet
-    site_year_phenometric_summary.parquet
-    site_pixel_sample_index.parquet
-```
+## Citation
 
-The app can load summaries instantly, then query pixel-level Parquet only when the user requests detailed subsets.
+McNicol et al.
+
+WetLSP: High-Resolution Global Wetland Land Surface Phenology Derived from PlanetScope Imagery.

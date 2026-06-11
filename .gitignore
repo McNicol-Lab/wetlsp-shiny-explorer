@@ -1,0 +1,8 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+config.yml
+data/
+*.log
+.DS_Store

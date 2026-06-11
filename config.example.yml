@@ -1,0 +1,12 @@
+# Copy to config.yml and edit.
+data_root: "/path/to/wetlsp-cyverse"
+catalog_csv: "wetlsp_cyverse_site_catalog_final.csv"
+mode: "local"
+
+# For testing on a subset:
+default_site_id: "US-Atq"
+default_year: 2021
+
+# Controls interactive performance.
+max_pixels_default: 250
+max_pixels_limit: 5000
